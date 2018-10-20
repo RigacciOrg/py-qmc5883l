@@ -37,11 +37,6 @@ python setup.py install
 Make sure that the install destination directory exists, e.g. for the
 Raspbian Stretch distro it is /usr/local/lib/python2.7/dist-packages.
 
-## Documentation
-
-Read the **[module source code](py_qmc5883l/__init__.py)** and the
-**[chip Datasheet](doc/QMC5883L-Datasheet-1.0.pdf)**.
-
 ## Output Range Scale
 
 The sensor produces values as 16 bit signed integers, i.e. 
@@ -56,3 +51,25 @@ If you operate in presence of strong magnetic fields, you can
 experience reading overflows (over the 16 bit capabilities), in 
 this case the driver will generate a warning and you can try to 
 initialize the sensor in 8 gauss range, as seen above.
+
+## Magnetic Declination
+
+If you want that the **QMC5883L.get_bearing()** method return 
+the current compass bearing adjusted by the *magnetic declination*,
+you have to set the **QMC5883L.declination** property.
+
+```
+sensor.get_bearing()
+87.20
+sensor.declination = 10.02
+sensor.get_bearing()
+97.22
+```
+
+The magnetic declination changes depending on the place and upon 
+time; there are some web services which give your current value.
+
+## Documentation
+
+Read the **[module source code](py_qmc5883l/__init__.py)** and the
+**[chip Datasheet](doc/QMC5883L-Datasheet-1.0.pdf)**.

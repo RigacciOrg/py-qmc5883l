@@ -78,6 +78,7 @@ class QMC5883L(object):
         self.address = address
         self.bus = smbus.SMBus(i2c_bus)
         self.output_range = output_range
+        self._declination = 0.0
         chip_id = self._read_byte(REG_CHIP_ID)
         if chip_id != 0xff:
             msg = "Chip ID returned 0x%x instead of 0xff; is the wrong chip?"
@@ -163,7 +164,7 @@ class QMC5883L(object):
         [x, y, z, t] = self.get_data()
         return [x, y, z]
 
-    def get_bearing(self):
+    def get_bearing_raw(self):
         """Calculate horizontal bearing upon magnetic X and Y values."""
         [x, y, z, t] = self.get_data()
         if x is not None and y is not None:
@@ -174,7 +175,37 @@ class QMC5883L(object):
         else:
             return None
 
+    def get_bearing(self):
+        """Get horizontal bearing, adjusted by magnetic declination."""
+        b = self.get_bearing_raw()
+        if b is not None:
+            b += self._declination
+            if b < 0.0:
+                b += 360.0
+            elif b >= 360.0:
+                b -= 360.0
+        return b
+
     def get_temp(self):
         """Get raw (uncalibrated) data from temperature sensor."""
         [x, y, z, t] = self.get_data()
         return t
+
+    def set_declination(self, value):
+        """Set the magnetic declination, in degrees."""
+        try:
+            d = float(value)
+            if d < -180.0 or d > 180.0:
+                logging.error(u'Declination must be >= -180 and <= 180.')
+            else:
+                self._declination = d
+        except:
+            logging.error(u'Declination must be a float value.')
+
+    def get_declination(self):
+        """Return the current set value of magnetic declination."""
+        return self._declination
+
+    declination = property(fget=get_declination,
+                           fset=set_declination,
+                           doc=u'Magnetic declination to adjust bearing.')
