@@ -87,6 +87,10 @@ class QMC5883L(object):
         self.mode_stby = (MODE_STBY | ODR_10HZ | RNG_2G | OSR_64)
         self.mode_continuous()
 
+    def __del__(self):
+        """Once finished using the sensor, switch to standby mode."""
+        self.mode_standby()
+
     def mode_continuous(self):
         """Set the device in continuous read mode."""
         self._write_byte(REG_CONTROL_2, SOFT_RST)  # Soft reset.
