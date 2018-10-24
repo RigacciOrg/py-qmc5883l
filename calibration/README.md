@@ -32,7 +32,8 @@ having some offset** from the axes origin.
 
 When a sufficient number of points are acquired (or when the "Q" 
 key is pressed, the script will save the gathered data to a file 
-and exit.
+and exit. The data file will be named
+**magnet-data\_YYYYmmdd\_HHMM.txt**.
 
 ## Executing 2d-calibration-make-calc
 
