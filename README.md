@@ -71,15 +71,26 @@ time; there are some web services which give your current value.
 
 ## Calibration
 
-TODO:
-Values returned by the magnetic sensor can be altered by several
-factors, like misalignment of sensor's axes, asimmetries in the
-sensor sensitivity, magnetic fields and magnetic (ferrous) metals
-in the proximity of the sensor.
+Values returned by the magnetic sensor may be altered by several 
+factors, like misalignment of sensor's axes, asimmetries in the 
+sensor sensitivity, magnetic fields and magnetic (ferrous) 
+metals in the proximity of the sensor.
 
-Into the [calibration directory](calibration/) there are some
-tools that can be used to perform a simple 2-D calibration using the
-Earth's magnetic field. This
+Into the **[calibration directory](calibration/)** there are 
+some tools that can be used to perform a simple 2D calibration 
+using the Earth's magnetic field.
+
+Once you have obtained the 3x3 calibration matrix, you can set 
+it into the driver using the **calibration** property and have 
+it automatically applied when calling the **get_bearing()** 
+function.
+
+```
+sensor.calibration = [[1.030, 0.026, -227.799],
+                      [0.0255, 1.021, 1016.442],
+                      [0.0, 0.0, 1.0]]
+sensor.get_bearing()
+```
 
 ## Documentation
 
