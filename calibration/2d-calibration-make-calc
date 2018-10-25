@@ -202,9 +202,9 @@ GNUPLOT_SCRIPT = u"""#!/usr/bin/gnuplot
 #
 # %s
 #
-# The same matrix, as a JSON loadable string:
+# The same matrix, as a Python array:
 #
-# json.loads("%s")
+# sensor.calibration = %s
 #
 input_data = "%s"
 set output "%s"

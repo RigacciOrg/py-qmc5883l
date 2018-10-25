@@ -22,7 +22,7 @@ __author__ = "Niccolo Rigacci"
 __copyright__ = "Copyright 2018 Niccolo Rigacci <niccolo@rigacci.org>"
 __license__ = "GPLv3-or-later"
 __email__ = "niccolo@rigacci.org"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # Subdivide the entire circle in sectors, to group samples.
 SECTORS_COUNT = 36
@@ -106,7 +106,7 @@ print_at(BORDER_X - 1, BORDER_Y + int(DIAL_RADIUS_Y), 'W')
 completed_sectors = 0
 NEEDLE_X = NEEDLE_Y = 1
 while True:
-    (x, y, z) = sensor.get_magnet()
+    (x, y, z) = sensor.get_magnet_raw()
     if x is not None and y is not None:
         # Angle on the XY plane from magnetic sensor.
         angle = math.atan2(y, x)
