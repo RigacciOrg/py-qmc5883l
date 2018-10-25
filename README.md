@@ -52,7 +52,7 @@ experience reading overflows (over the 16 bit capabilities), in
 this case the driver will generate a warning and you can try to 
 initialize the sensor in 8 gauss range, as seen above.
 
-## Magnetic Declination
+## Adjust for Magnetic Declination
 
 If you want that the **QMC5883L.get_bearing()** method return 
 the current compass bearing adjusted by the *magnetic declination*,
@@ -68,6 +68,18 @@ sensor.get_bearing()
 
 The magnetic declination changes depending on the place and upon 
 time; there are some web services which give your current value.
+
+## Calibration
+
+TODO:
+Values returned by the magnetic sensor can be altered by several
+factors, like misalignment of sensor's axes, asimmetries in the
+sensor sensitivity, magnetic fields and magnetic (ferrous) metals
+in the proximity of the sensor.
+
+Into the [calibration directory](calibration/) there are some
+tools that can be used to perform a simple 2-D calibration using the
+Earth's magnetic field. This
 
 ## Documentation
 

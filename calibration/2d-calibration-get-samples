@@ -122,8 +122,8 @@ while True:
         NEEDLE_X = BORDER_X + int(DIAL_RADIUS_X + DIAL_RADIUS_X * 0.8 * math.sin(needle_angle))
         NEEDLE_Y = BORDER_Y + int(DIAL_RADIUS_Y - DIAL_RADIUS_Y * 0.8 * math.cos(needle_angle))
         print_at(NEEDLE_X, NEEDLE_Y, "O", curses.A_REVERSE)
-        print_at(0, TOTAL_HEIGHT, "(X, Y) = (%s, %s), Compass: %0.0f deg"
-                 % ("{:6d}".format(x), "{:6d}".format(y), math.degrees(angle)))
+        print_at(0, TOTAL_HEIGHT, "(X, Y) = (%s, %s), Compass: %s deg"
+                % ("{:6d}".format(x), "{:6d}".format(y), "{:5.1f}".format(math.degrees(angle))))
         if sampled < SAMPLES_PER_SECTOR:
             DOT_X = BORDER_X + int(DIAL_RADIUS_X + DIAL_RADIUS_X * math.sin(needle_angle))
             DOT_Y = BORDER_Y + int(DIAL_RADIUS_Y - DIAL_RADIUS_Y * math.cos(needle_angle))

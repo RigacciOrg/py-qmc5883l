@@ -16,6 +16,8 @@ calibration, generally require a realtime 3D graphic animation.
 
 ## Gathering data with 2d-calibration-get-samples
 
+<img align="left" width="100" src="img/fig1_mobile-screenshot.png">
+
 First of all we need to execute the 
 **2d-calibration-get-samples** script. It runs doing a 
 continuous read of the magnetic sensor and saving several data 
@@ -36,6 +38,8 @@ and exit. The data file will be named
 **magnet-data\_YYYYmmdd\_HHMM.txt**.
 
 ## Executing 2d-calibration-make-calc
+
+<img align="right" width="200" src="img/fig2_calibration-graph.png">
 
 This second script will calculate the **geometric 
 transformation** required to transform the decentered ellipse 

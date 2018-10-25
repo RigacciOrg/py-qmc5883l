@@ -198,7 +198,7 @@ y2 = P2[1, 0]
 #print("compass-2d-calibration: phi=%s, a=%.1f, b=%.1f, cx=%.1f, cy=%.1f, TEST_PHI=%.1f, x1=%.1f, y1=%.1f" % (phi, a, b, cx, cy, TEST_PHI, x1, y1))
 
 # Output the Gnuplot recipe.
-print(u"""#!/usr/bin/gnuplot
+GNUPLOT_SCRIPT = u"""#!/usr/bin/gnuplot
 #
 # The calibration matrix (affine transformation with offset to origin):
 #
@@ -253,18 +253,19 @@ plot input_data using 1:2:(circle_size) with circles linestyle 100 \\
     "<echo '%.2f %.2f'" \\
         using 1:2:(circle_size) with circles linestyle 500 \\
         title "Example Point: Offset to Origin"
-"""  % (str(M1).replace("\n", "\n# "),  # Affine Matrix (split on multiple comment lines)
-        json.dumps(M1.tolist()),  # Affine matrix (JSON Python string)
-        RAW_DATA_FILE,
-        OUTPUT_PNG,
-        MAX_SCALE, MAX_SCALE, MAX_SCALE, MAX_SCALE, MAX_SCALE,
-        cx, cy, a, b, np.degrees(phi),  # Label
-        cx, cy, a*2, b*2, np.degrees(phi),  # Best Fit Ellipse
-        cx, cy, max(a, b),  # Affine Circle
-        max(a, b),  # Centered Affine Circle
-        cx, cy, ax, ay, cx, cy, bx, by,  # Semi-axis A and B
-        cx, cy, x1, y1, cx, cy, x2, y2,  # Example point + transformed (vector)
-        x1, y1, x2, y2,  # Example point + transformed (dot)
-        x2-cx, y2-cy,  # Example point transformed and centered (vector)
-        x2-cx, y2-cy)  # Example point (dot)
-)
+"""
+print((GNUPLOT_SCRIPT % (str(M1).replace("\n", "\n# "),  # Affine Matrix (split on multiple comment lines)
+      json.dumps(M1.tolist()),  # Affine matrix (JSON Python string)
+      RAW_DATA_FILE,
+      OUTPUT_PNG,
+      MAX_SCALE, MAX_SCALE, MAX_SCALE, MAX_SCALE, MAX_SCALE,
+      cx, cy, a, b, np.degrees(phi),  # Label
+      cx, cy, a*2, b*2, np.degrees(phi),  # Best Fit Ellipse
+      cx, cy, max(a, b),  # Affine Circle
+      max(a, b),  # Centered Affine Circle
+      cx, cy, ax, ay, cx, cy, bx, by,  # Semi-axis A and B
+      cx, cy, x1, y1, cx, cy, x2, y2,  # Example point + transformed (vector)
+      x1, y1, x2, y2,  # Example point + transformed (dot)
+      x2-cx, y2-cy,  # Example point transformed and centered (vector)
+      x2-cx, y2-cy)  # Example point (dot)
+).encode('utf-8'))
