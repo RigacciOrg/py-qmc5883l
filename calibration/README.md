@@ -96,5 +96,4 @@ calculated transformation matrix, ready to be used into the
 # sensor.calibration = [[1.0303, 0.0255, -227.7989],
 #                       [0.0255, 1.0214, 1016.4415],
 #                       [0.0, 0.0, 1.0]]
-#
 ```

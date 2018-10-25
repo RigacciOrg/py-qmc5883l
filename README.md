@@ -58,12 +58,12 @@ If you want that the **QMC5883L.get_bearing()** method return
 the current compass bearing adjusted by the *magnetic declination*,
 you have to set the **QMC5883L.declination** property.
 
-```
+```python
 sensor.get_bearing()
-87.20
+# 87.20
 sensor.declination = 10.02
 sensor.get_bearing()
-97.22
+# 97.22
 ```
 
 The magnetic declination changes depending on the place and upon 
@@ -85,7 +85,7 @@ it into the driver using the **calibration** property and have
 it automatically applied when calling the **get_bearing()** 
 function.
 
-```
+```python
 sensor.calibration = [[1.030, 0.026, -227.799],
                       [0.0255, 1.021, 1016.442],
                       [0.0, 0.0, 1.0]]
