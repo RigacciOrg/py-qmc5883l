@@ -36,12 +36,12 @@ __author__ = "Niccolo Rigacci"
 __copyright__ = "Copyright 2018 Niccolo Rigacci <niccolo@rigacci.org>"
 __license__ = "GPLv3-or-later"
 __email__ = "niccolo@rigacci.org"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 if len(sys.argv) > 1:
     RAW_DATA_FILE = sys.argv[1]
 else:
-    print("Usage: %s {raw_data_file}" % (os.path.basename(sys.argv[0])))
+    print(u"Usage: %s {raw_data_file}" % (os.path.basename(sys.argv[0])))
     sys.exit(1)
 
 # Take a point of the ellipse to show affine transformation to circle.
@@ -194,8 +194,6 @@ P1.shape = (3,1)
 P2 = np.matmul(M, P1)
 x2 = P2[0, 0]
 y2 = P2[1, 0]
-
-#print("compass-2d-calibration: phi=%s, a=%.1f, b=%.1f, cx=%.1f, cy=%.1f, TEST_PHI=%.1f, x1=%.1f, y1=%.1f" % (phi, a, b, cx, cy, TEST_PHI, x1, y1))
 
 # Output the Gnuplot recipe.
 GNUPLOT_SCRIPT = u"""#!/usr/bin/gnuplot

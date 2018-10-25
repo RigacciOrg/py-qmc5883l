@@ -16,7 +16,7 @@ calibration, generally require a realtime 3D graphic animation.
 
 ## Gathering data with 2d-calibration-get-samples
 
-<img align="left" width="100" src="img/fig1_mobile-screenshot.png">
+<img align="left" width="160" src="img/fig1_mobile-screenshot.png">
 
 First of all we need to execute the 
 **2d-calibration-get-samples** script. It runs doing a 
@@ -39,7 +39,7 @@ and exit. The data file will be named
 
 ## Executing 2d-calibration-make-calc
 
-<img align="right" width="200" src="img/fig2_calibration-graph.png">
+<img align="right" width="400" src="img/fig2_calibration-graph.png">
 
 This second script will calculate the **geometric 
 transformation** required to transform the decentered ellipse 
@@ -53,7 +53,7 @@ Another result will be a **Gnuplot script** which can be used to
 visualize the acquired points and the geometric transformation 
 calculated.
 
-In details, the script will:
+In details, the Python script will:
 
 1. Calculate the **ellipse that best fits the data**, using the 
 least squares method.
