@@ -174,9 +174,9 @@ class QMC5883L(object):
             [x1, y1, z1] = [x, y, z]
         else:
             c = self._calibration
-            x1 = x * c[0][0] + y * c[0][1] + x * c[0][2]
-            y1 = x * c[1][0] + y * c[1][1] + x * c[1][2]
-            z1 = x * c[2][0] + y * c[2][1] + x * c[2][2]
+            x1 = x * c[0][0] + y * c[0][1] + z * c[0][2]
+            y1 = x * c[1][0] + y * c[1][1] + z * c[1][2]
+            z1 = x * c[2][0] + y * c[2][1] + z * c[2][2]
         return [x1, y1, z1]
 
     def get_bearing_raw(self):
