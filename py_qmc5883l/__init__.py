@@ -22,7 +22,7 @@ __author__ = "Niccolo Rigacci"
 __copyright__ = "Copyright 2018 Niccolo Rigacci <niccolo@rigacci.org>"
 __license__ = "GPLv3-or-later"
 __email__ = "niccolo@rigacci.org"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 DFLT_BUS = 1
 DFLT_ADDRESS = 0x0d
@@ -168,16 +168,15 @@ class QMC5883L(object):
         return [x, y, z]
 
     def get_magnet(self):
-        """Return the magnetic sensor vector with calibration applied."""
+        """Return the horizontal magnetic sensor vector with (x, y) calibration applied."""
         [x, y, z] = self.get_magnet_raw()
-        if x is None or y is None or z is None:
-            [x1, y1, z1] = [x, y, z]
+        if x is None or y is None:
+            [x1, y1] = [x, y]
         else:
             c = self._calibration
-            x1 = x * c[0][0] + y * c[0][1] + z * c[0][2]
-            y1 = x * c[1][0] + y * c[1][1] + z * c[1][2]
-            z1 = x * c[2][0] + y * c[2][1] + z * c[2][2]
-        return [x1, y1, z1]
+            x1 = x * c[0][0] + y * c[0][1] + c[0][2]
+            y1 = x * c[1][0] + y * c[1][1] + c[1][2]
+        return [x1, y1]
 
     def get_bearing_raw(self):
         """Horizontal bearing (in degrees) from magnetic value X and Y."""
@@ -227,7 +226,7 @@ class QMC5883L(object):
         return self._declination
 
     def set_calibration(self, value):
-        """Set the 3x3 matrix for magnetic vector calibration."""
+        """Set the 3x3 matrix for horizontal (x, y) magnetic vector calibration."""
         c = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
         try:
             for i in range(0, 3):
@@ -247,4 +246,4 @@ class QMC5883L(object):
 
     calibration = property(fget=get_calibration,
                            fset=set_calibration,
-                           doc=u'Transformation matrix to adjust magnetic vector.')
+                           doc=u'Transformation matrix to adjust (x, y) magnetic vector.')
