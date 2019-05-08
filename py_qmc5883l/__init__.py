@@ -22,7 +22,7 @@ __author__ = "Niccolo Rigacci"
 __copyright__ = "Copyright 2018 Niccolo Rigacci <niccolo@rigacci.org>"
 __license__ = "GPLv3-or-later"
 __email__ = "niccolo@rigacci.org"
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 DFLT_BUS = 1
 DFLT_ADDRESS = 0x0d
@@ -191,7 +191,7 @@ class QMC5883L(object):
 
     def get_bearing(self):
         """Horizontal bearing, adjusted by calibration and declination."""
-        [x, y, z] = self.get_magnet()
+        [x, y] = self.get_magnet()
         if x is None or y is None:
             return None
         else:
