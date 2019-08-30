@@ -74,7 +74,7 @@ like this:
 
 ```
 2d-calibration-get-samples
-2d-calibration-make-calc magnet-data_20181018_1711.txt > gnuplot-script
+2d-calibration-make-calc magnet-data_20181018_1711.txt
 gnuplot gnuplot-script
 ```
 

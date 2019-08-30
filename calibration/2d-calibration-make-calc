@@ -252,7 +252,9 @@ plot input_data using 1:2:(circle_size) with circles linestyle 100 \\
         using 1:2:(circle_size) with circles linestyle 500 \\
         title "Example Point: Offset to Origin"
 """
-print((GNUPLOT_SCRIPT % (str(M1).replace("\n", "\n# "),  # Affine Matrix (split on multiple comment lines)
+
+with open ('gnuplot-script', 'w') as rsh:
+    rsh.write((GNUPLOT_SCRIPT % (str(M1).replace("\n", "\n# "),  # Affine Matrix (split on multiple comment lines)
       json.dumps(M1.tolist()),  # Affine matrix (JSON Python string)
       RAW_DATA_FILE,
       OUTPUT_PNG,
@@ -266,4 +268,4 @@ print((GNUPLOT_SCRIPT % (str(M1).replace("\n", "\n# "),  # Affine Matrix (split 
       x1, y1, x2, y2,  # Example point + transformed (dot)
       x2-cx, y2-cy,  # Example point transformed and centered (vector)
       x2-cx, y2-cy)  # Example point (dot)
-).encode('utf-8'))
+))
