@@ -24,6 +24,15 @@ Web References:
     https://math.stackexchange.com/questions/619037/circle-affine-transformation
   * How to fit a 2D ellipse to given points
     https://stackoverflow.com/questions/47873759/how-to-fit-a-2d-ellipse-to-given-points
+  * Fitting an ellipse to a set of data points in python (nan values in axes)
+    https://stackoverflow.com/questions/39693869/fitting-an-ellipse-to-a-set-of-data-points-in-python
+
+Releases
+
+   2020-06-11 - Released version 0.2.0
+     * Added an alternative method in fit_ellipse() to avoid sqrt of negative
+       numbers in some weird cases, causing nan values for ellipse axes.
+     * Fixed a potential problem calcluating MAX_SCALE
 """
 
 import os.path
@@ -36,7 +45,7 @@ __author__ = "Niccolo Rigacci"
 __copyright__ = "Copyright 2018 Niccolo Rigacci <niccolo@rigacci.org>"
 __license__ = "GPLv3-or-later"
 __email__ = "niccolo@rigacci.org"
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 if len(sys.argv) > 1:
     RAW_DATA_FILE = sys.argv[1]
@@ -88,7 +97,7 @@ def read_data_file():
     return x, y, min_x, min_y, max_x, max_y
 
 
-def fit_ellipse(x, y):
+def fit_ellipse(x, y, use_abs=True):
     """Return the best fit ellipse from two numpy.ndarray
     (multidimensional arrays) of vertices."""
     x = x[:, np.newaxis]
@@ -98,7 +107,11 @@ def fit_ellipse(x, y):
     C = np.zeros([6,6])
     C[0, 2] = C[2, 0] = 2; C[1, 1] = -1
     E, V = eig(np.dot(inv(S), C))
-    n = np.argmax(np.abs(E))
+    if use_abs:
+        n = np.argmax(np.abs(E))
+    else:
+        # Use this if semi axes are invalid (sqrt of negative).
+        n = np.argmax(E)
     a = V[:, n]
     return a
 
@@ -118,10 +131,13 @@ def ellipse_semi_axes_length(a):
     up = 2*(a*f*f+c*d*d+g*b*b-2*b*d*f-a*c*g)
     down1=(b*b-a*c)*( (c-a)*np.sqrt(1+4*b*b/((a-c)*(a-c)))-(c+a))
     down2=(b*b-a*c)*( (a-c)*np.sqrt(1+4*b*b/((a-c)*(a-c)))-(c+a))
-    res1=np.sqrt(up/down1)
-    res2=np.sqrt(up/down2)
+    if (up/down1) >= 0 and (up/down2) >= 0:
+        res1=np.sqrt(up/down1)
+        res2=np.sqrt(up/down2)
+    else:
+        res1 = None
+        res2 = None
     return np.array([res1, res2])
-
 
 def ellipse_angle_of_rotation(a):
     """Return the rotation angle (in radians) of the ellipse axes.
@@ -160,17 +176,25 @@ def affine_matrix(a, b, phi, to_origin=False):
 
 # Read data from file.
 x, y, min_x, min_y, max_x, max_y = read_data_file()
-MAX_SCALE = int(max(abs(min_x), abs(max_x), abs(min_y), abs(max_y)) / 500) * 750
+MAX_SCALE = int(max(abs(min_x), abs(max_x), abs(min_y), abs(max_y)) / 500.0 * 750.0)
 
 # Convert lists x and y into Numpy N-dimensional arrays.
 x_arr = np.fromiter(x, np.float)
 y_arr = np.fromiter(y, np.float)
 
 # Calculate the ellipse which best fits the data.
+warning = ''
 ellipse = fit_ellipse(x_arr, y_arr)
 [cx, cy] = ellipse_center(ellipse)
 [a, b] = ellipse_semi_axes_length(ellipse)
 phi = ellipse_angle_of_rotation(ellipse)
+# If semi axes are invalid, try a different method.
+if a == None or b == None:
+    warning = "Invalid semi axes detected: using fit_ellipse() without np.abs()."
+    ellipse = fit_ellipse(x_arr, y_arr, use_abs=False)
+    [cx, cy] = ellipse_center(ellipse)
+    [a, b] = ellipse_semi_axes_length(ellipse)
+    phi = ellipse_angle_of_rotation(ellipse)
 
 # Calculate the coordinates of semi-axes vertices.
 ax = cx + a * np.cos(phi)
@@ -205,6 +229,8 @@ GNUPLOT_SCRIPT = u"""#!/usr/bin/gnuplot
 # The same matrix, as a Python array:
 #
 # sensor.calibration = %s
+#
+# %s
 #
 input_data = "%s"
 set output "%s"
@@ -254,6 +280,7 @@ plot input_data using 1:2:(circle_size) with circles linestyle 100 \\
 """
 print((GNUPLOT_SCRIPT % (str(M1).replace("\n", "\n# "),  # Affine Matrix (split on multiple comment lines)
       json.dumps(M1.tolist()),  # Affine matrix (JSON Python string)
+      warning,  # Warning message, if any.
       RAW_DATA_FILE,
       OUTPUT_PNG,
       MAX_SCALE, MAX_SCALE, MAX_SCALE, MAX_SCALE, MAX_SCALE,
