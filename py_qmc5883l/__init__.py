@@ -16,7 +16,7 @@ of the magnetic sensor on axis X, Y and Z, e.g. [-1257, 940, -4970].
 import logging
 import math
 import time
-import smbus
+import smbus2
 
 __author__ = "Niccolo Rigacci"
 __copyright__ = "Copyright 2018 Niccolo Rigacci <niccolo@rigacci.org>"
@@ -76,7 +76,7 @@ class QMC5883L(object):
                  oversampling_rate=OSR_512):
 
         self.address = address
-        self.bus = smbus.SMBus(i2c_bus)
+        self.bus = smbus2.SMBus(i2c_bus)
         self.output_range = output_range
         self._declination = 0.0
         self._calibration = [[1.0, 0.0, 0.0],
